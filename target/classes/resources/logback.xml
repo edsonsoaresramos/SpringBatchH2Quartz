@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true">
+
+	<property name="LOG_LOCATION" value="logs" />
+ 
+	<discriminator>
+		<key>nomeDelLog</key>
+		<defaultValue>replyJob0</defaultValue>
+	</discriminator>
+ 
+    <appender name="consoleAppender" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <charset>UTF-8</charset>
+            <Pattern>%d{dd-MM-yyyy HH:mm:ss} %p %X{TXNID} - %m%n</Pattern>
+        </encoder>
+    </appender>
+    
+    <appender name="fileAppender" class="ch.qos.logback.core.FileAppender">
+    	<file>${LOG_LOCATION}/${nomeDelLog}.log</file>
+        <encoder>
+			<pattern>%date %level [%thread] %logger{10} [%file:%line] %msg%n</pattern>
+        </encoder>
+        
+		<rollingPolicy
+			class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+			<FileNamePattern>${LOG_LOCATION}/${nomeDelLog}.%i.log.zip
+			</FileNamePattern>
+			<MinIndex>1</MinIndex>
+			<MaxIndex>10</MaxIndex>
+		</rollingPolicy>
+
+		<triggeringPolicy
+			class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+			<MaxFileSize>10MB</MaxFileSize>
+		</triggeringPolicy>        
+    </appender>    
+ 
+    <root level="INFO">
+        <appender-ref ref="consoleAppender" />
+        <appender-ref ref="fileAppender" />
+    </root>
+</configuration>
